@@ -1,4 +1,9 @@
 # Introduction
+This is intended to assist users in the DEV1091B workshop at Splunk .conf23 in Las Vegas, however you may find some of these resources helpful when starting out using Splunk's UCC app framework.  
+
+The aim of the workshop is to introduce you to UCC and walk through how to get started with a simple API data collection example. In this case we are pulling energy usage data from [Equine Energy's API](https://energyapi.splunk.engineer)).  
+
+*Note: Equine Energy is a ficitious company used for the purposes of the workshop. We intend to keep the API available for a number of weeks after the conference to allow you to continue using it for development.*
 
 # Prerequisites
 * UCC
