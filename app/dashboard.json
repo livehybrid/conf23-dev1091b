@@ -3,7 +3,7 @@
 		"ds_search_1_new": {
 			"type": "ds.search",
 			"options": {
-				"query": "index=main source=\"energy_usage://Equine1\" earliest=-24h | timechart max(demand) AS \"Demand (Wh)\" span=10s",
+				"query": "index=main source=\"energy_usage://*\" earliest=-24h | timechart max(demand) AS \"Demand (Wh)\" span=10s",
 				"queryParameters": {
 					"earliest": "-7d@h",
 					"latest": "now"
@@ -14,7 +14,7 @@
 		"ds_pbTcdNWk_ds_cOch7N1D_ds_search_1_new": {
 			"type": "ds.search",
 			"options": {
-				"query": "index=main source=\"energy_usage://Equine1\" earliest=-24h | timechart avg(demand) as avgDemand max(demand) as maxDemand latest(demand) AS latestDemand, p95(demand) AS p95demandWatts span=1h | eventstats  max(maxDemand) AS max24h, avg(avgDemand) as avg24h |  eval usage24KW=avg24h*24/1000, max24h=max24h/1000",
+				"query": "index=main source=\"energy_usage://*\" earliest=-24h | timechart avg(demand) as avgDemand max(demand) as maxDemand latest(demand) AS latestDemand, p95(demand) AS p95demandWatts span=1h | eventstats  max(maxDemand) AS max24h, avg(avgDemand) as avg24h |  eval usage24KW=avg24h*24/1000, max24h=max24h/1000",
 				"queryParameters": {
 					"earliest": "-60m@m",
 					"latest": "now"
