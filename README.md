@@ -20,9 +20,7 @@ The aim of the workshop is to introduce you to UCC and walk through how to get s
  `ucc-gen --help`
 
 * Create Barebones app  
-`ucc-gen init --addon-name "ta_equine_energy" \ 
---addon-display-name "Equine Energy Add-on for Splunk" \ 
---addon-input-name energy_usage  
+`ucc-gen init --addon-name "ta_equine_energy" --addon-display-name "Equine Energy Add-on for Splunk" --addon-input-name energy_usage  
 `
 * Build app:
 ` ucc-gen build --ta-version 1.0.0`  
