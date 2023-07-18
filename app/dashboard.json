@@ -1,0 +1,394 @@
+{
+	"dataSources": {
+		"ds_search_1_new": {
+			"type": "ds.search",
+			"options": {
+				"query": "index=main source=\"energy_usage://Equine1\" earliest=-24h | timechart max(demand) AS \"Demand (Wh)\" span=10s",
+				"queryParameters": {
+					"earliest": "-7d@h",
+					"latest": "now"
+				}
+			},
+			"name": "demand"
+		},
+		"ds_pbTcdNWk_ds_cOch7N1D_ds_search_1_new": {
+			"type": "ds.search",
+			"options": {
+				"query": "index=main source=\"energy_usage://Equine1\" earliest=-24h | timechart avg(demand) as avgDemand max(demand) as maxDemand latest(demand) AS latestDemand, p95(demand) AS p95demandWatts span=1h | eventstats  max(maxDemand) AS max24h, avg(avgDemand) as avg24h |  eval usage24KW=avg24h*24/1000, max24h=max24h/1000",
+				"queryParameters": {
+					"earliest": "-60m@m",
+					"latest": "now"
+				}
+			},
+			"name": "radials"
+		}
+	},
+	"visualizations": {
+		"viz_chart_1_new": {
+			"type": "splunk.column",
+			"dataSources": {
+				"primary": "ds_search_1_new"
+			},
+			"options": {
+				"yAxisAbbreviation": "auto",
+				"y2AxisAbbreviation": "auto",
+				"showRoundedY2AxisLabels": false,
+				"legendTruncation": "ellipsisMiddle",
+				"showY2MajorGridLines": true,
+				"xAxisLabelRotation": 0,
+				"xAxisTitleVisibility": "show",
+				"yAxisTitleVisibility": "show",
+				"y2AxisTitleVisibility": "show",
+				"yAxisScale": "linear",
+				"showOverlayY2Axis": 0,
+				"y2AxisScale": "inherit",
+				"dataValuesDisplay": "off",
+				"stackMode": "auto",
+				"showSplitSeries": 0,
+				"showIndependentYRanges": 0,
+				"legendDisplay": "right",
+				"lineWidth": 2,
+				"y": "> primary | frameBySeriesNames('Demand (Wh)','_span')"
+			}
+		},
+		"viz_R86hclFB": {
+			"type": "splunk.singlevalueradial",
+			"dataSources": {
+				"primary": "ds_pbTcdNWk_ds_cOch7N1D_ds_search_1_new"
+			},
+			"showProgressBar": false,
+			"showLastUpdated": false,
+			"title": "1-day total usage",
+			"description": "",
+			"options": {
+				"unit": "kW",
+				"majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+				"maxValue": 40,
+				"majorValue": "> primary | seriesByName('usage24KW') | lastPoint()",
+				"trendDisplay": "off"
+			},
+			"context": {
+				"majorColorEditorConfig": [
+					{
+						"value": "#088f44",
+						"to": 8
+					},
+					{
+						"value": "#2eb82e",
+						"from": 8,
+						"to": 19
+					},
+					{
+						"value": "#c3cc33",
+						"from": 19,
+						"to": 22
+					},
+					{
+						"value": "#FFD442",
+						"from": 22,
+						"to": 27
+					},
+					{
+						"value": "#ffa857",
+						"from": 27,
+						"to": 37
+					},
+					{
+						"value": "#ff7149",
+						"from": 37,
+						"to": 40
+					},
+					{
+						"value": "#fe3a3a",
+						"from": 40
+					}
+				]
+			}
+		},
+		"viz_9aH2YPjW": {
+			"type": "splunk.singlevalueradial",
+			"dataSources": {
+				"primary": "ds_pbTcdNWk_ds_cOch7N1D_ds_search_1_new"
+			},
+			"showProgressBar": false,
+			"showLastUpdated": false,
+			"title": "Latest usage",
+			"description": "Watts",
+			"options": {
+				"unit": "Wh",
+				"majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+				"maxValue": 10000
+			},
+			"context": {
+				"majorColorEditorConfig": [
+					{
+						"value": "#088f44",
+						"to": 300
+					},
+					{
+						"value": "#2eb82e",
+						"from": 300,
+						"to": 700
+					},
+					{
+						"value": "#c3cc33",
+						"from": 700,
+						"to": 800
+					},
+					{
+						"value": "#FFD442",
+						"from": 800,
+						"to": 1200
+					},
+					{
+						"value": "#ffa857",
+						"from": 1200,
+						"to": 2000
+					},
+					{
+						"value": "#ff7149",
+						"from": 2000,
+						"to": 7500
+					},
+					{
+						"value": "#fe3a3a",
+						"from": 7500
+					}
+				]
+			}
+		},
+		"viz_hhWGD0q1": {
+			"type": "splunk.singlevalueradial",
+			"dataSources": {
+				"primary": "ds_pbTcdNWk_ds_cOch7N1D_ds_search_1_new"
+			},
+			"showProgressBar": false,
+			"showLastUpdated": false,
+			"title": "1-hour p95 usage",
+			"description": "Watts",
+			"options": {
+				"unit": "Wh",
+				"majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+				"maxValue": 10000,
+				"majorValue": "> primary | seriesByName('p95demandWatts') | lastPoint()",
+				"trendValue": "> primary | seriesByName('p95demandWatts') | delta(-2)"
+			},
+			"context": {
+				"majorColorEditorConfig": [
+					{
+						"value": "#088f44",
+						"to": 300
+					},
+					{
+						"value": "#2eb82e",
+						"from": 300,
+						"to": 700
+					},
+					{
+						"value": "#c3cc33",
+						"from": 700,
+						"to": 900
+					},
+					{
+						"value": "#FFD442",
+						"from": 900,
+						"to": 1200
+					},
+					{
+						"value": "#ffa857",
+						"from": 1200,
+						"to": 2000
+					},
+					{
+						"value": "#ff7149",
+						"from": 2000,
+						"to": 7500
+					},
+					{
+						"value": "#fe3a3a",
+						"from": 7500
+					}
+				]
+			}
+		},
+		"viz_JdHagHmp": {
+			"type": "splunk.markdown",
+			"options": {
+				"markdown": "# Equine Energy"
+			}
+		},
+		"viz_WSBpgjhJ": {
+			"type": "splunk.singlevalueradial",
+			"dataSources": {
+				"primary": "ds_pbTcdNWk_ds_cOch7N1D_ds_search_1_new"
+			},
+			"showProgressBar": false,
+			"showLastUpdated": false,
+			"title": "Max demand in 24hr",
+			"description": "",
+			"options": {
+				"unit": "kW",
+				"majorColor": "> majorValue | rangeValue(majorColorEditorConfig)",
+				"numberPrecision": 2,
+				"maxValue": 10,
+				"majorValue": "> primary | seriesByName('max24h') | lastPoint()",
+				"trendDisplay": "off"
+			},
+			"context": {
+				"majorColorEditorConfig": [
+					{
+						"value": "#088f44",
+						"to": 1
+					},
+					{
+						"value": "#2eb82e",
+						"from": 1,
+						"to": 2
+					},
+					{
+						"value": "#c3cc33",
+						"from": 2,
+						"to": 3
+					},
+					{
+						"value": "#FFD442",
+						"from": 3,
+						"to": 4
+					},
+					{
+						"value": "#ffa857",
+						"from": 4,
+						"to": 8
+					},
+					{
+						"value": "#ff7149",
+						"from": 8,
+						"to": 12
+					},
+					{
+						"value": "#fe3a3a",
+						"from": 12
+					}
+				]
+			}
+		},
+		"viz_hyVDh45l": {
+			"type": "splunk.image",
+			"options": {
+				"preserveAspectRatio": true,
+				"src": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMTEwLjUgMTIyLjg4IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAxMTAuNSAxMjIuODgiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbDQoJLnN0MHtmaWxsLXJ1bGU6ZXZlbm9kZDtjbGlwLXJ1bGU6ZXZlbm9kZDtmaWxsOiNGNkMzMkU7fQ0KCS5zdDF7ZmlsbDojMzkzOTM5O30NCl1dPjwvc3R5bGU+PGc+PHBhdGggY2xhc3M9InN0MSIgZD0iTTg3LjM0LDEzLjQ3YzIuNDksMS43OCw0LjgyLDMuNzUsNi45Nyw1LjkxYzEwLDEwLDE2LjE4LDIzLjgxLDE2LjE4LDM5LjA3cy02LjE4LDI5LjA3LTE2LjE4LDM5LjA3IFM3MC41LDExMy43LDU1LjI1LDExMy43Yy02Ljk5LDAtMTMuNjctMS4zLTE5LjgzLTMuNjZsOC4zNy05LjI0YzMuNjUsMC45OSw3LjQ5LDEuNTEsMTEuNDYsMS41MWMxMi4xMSwwLDIzLjA4LTQuOTEsMzEuMDEtMTIuODUgYzcuOTQtNy45NCwxMi44NC0xOC45LDEyLjg0LTMxLjAxYzAtMTIuMTEtNC45MS0yMy4wOC0xMi44NC0zMS4wMWMtMS42Ni0xLjY2LTMuNDUtMy4xOC01LjM1LTQuNTZMODcuMzQsMTMuNDdMODcuMzQsMTMuNDd6IE0xOC4xOCw5OS40MmMtMC42OC0wLjYyLTEuMzUtMS4yNS0yLTEuOUM2LjE4LDg3LjUyLDAsNzMuNzEsMCw1OC40NXM2LjE4LTI5LjA3LDE2LjE4LTM5LjA3YzcuODYtNy44NiwxOC4wNy0xMy4zNiwyOS40OS0xNS4zNSBsLTcuMzUsMTMuOTVjLTUuMzEsMi4yMi0xMC4wOSw1LjQ2LTE0LjA5LDkuNDZjLTcuOTQsNy45NC0xMi44NSwxOC45LTEyLjg1LDMxLjAxYzAsMTEuODIsNC42NywyMi41NCwxMi4yNywzMC40M0wxOC4xOCw5OS40MiBMMTguMTgsOTkuNDJ6Ii8+PHBvbHlnb24gY2xhc3M9InN0MCIgcG9pbnRzPSI4OC45NSwwIDU2Ljc5LDAuNDMgMjUuODEsNTkuMjQgNDYuOTEsNTkuNDYgMTMuOTQsMTIyLjg4IDg4LjMxLDQxLjU2IDYwLjUzLDQxLjU2IDg4Ljk1LDAiLz48L2c+PC9zdmc+"
+			}
+		},
+		"viz_neKe6NSY": {
+			"type": "splunk.markdown",
+			"options": {
+				"markdown": "## Welcome!  \nThis is a sample dashboard as part of a workshop (DEV1091B) at Splunk .conf23 to demonstrate how to build apps with Splunk UCC Framework!  \n\nThe data in this dashboard is pulled in using a [synthetic data API](https://energyapi.splunk.engineer/) based upon a real day of energy consumption and is now available to help you learn how to import data into Splunk with your own apps.  \n\nCheck out the GitHub repo for more information: [https://github.com/livehybrid/conf23-dev1091b/](https://github.com/livehybrid/conf23-dev1091b/)"
+			}
+		}
+	},
+	"inputs": {},
+	"layout": {
+		"type": "absolute",
+		"options": {
+			"display": "auto-scale",
+			"backgroundColor": "black",
+			"showTitleAndDescription": false
+		},
+		"structure": [
+			{
+				"item": "viz_chart_1_new",
+				"type": "block",
+				"position": {
+					"x": 0,
+					"y": 360,
+					"w": 1200,
+					"h": 310
+				}
+			},
+			{
+				"item": "viz_R86hclFB",
+				"type": "block",
+				"position": {
+					"x": 710,
+					"y": 0,
+					"w": 235,
+					"h": 180
+				}
+			},
+			{
+				"item": "viz_9aH2YPjW",
+				"type": "block",
+				"position": {
+					"x": 210,
+					"y": 0,
+					"w": 235,
+					"h": 180
+				}
+			},
+			{
+				"item": "viz_hhWGD0q1",
+				"type": "block",
+				"position": {
+					"x": 460,
+					"y": 0,
+					"w": 235,
+					"h": 180
+				}
+			},
+			{
+				"item": "viz_JdHagHmp",
+				"type": "block",
+				"position": {
+					"x": 20,
+					"y": 160,
+					"w": 170,
+					"h": 30
+				}
+			},
+			{
+				"item": "viz_WSBpgjhJ",
+				"type": "block",
+				"position": {
+					"x": 960,
+					"y": 0,
+					"w": 235,
+					"h": 180
+				}
+			},
+			{
+				"item": "viz_hyVDh45l",
+				"type": "block",
+				"position": {
+					"x": 10,
+					"y": 10,
+					"w": 190,
+					"h": 140
+				}
+			},
+			{
+				"item": "viz_neKe6NSY",
+				"type": "block",
+				"position": {
+					"x": 30,
+					"y": 200,
+					"w": 1140,
+					"h": 130
+				}
+			}
+		],
+		"globalInputs": []
+	},
+	"title": "Equine Energy Usage",
+	"defaults": {
+		"dataSources": {
+			"ds.search": {
+				"options": {
+					"queryParameters": {
+						"latest": "$global_time.latest$",
+						"earliest": "$global_time.earliest$"
+					}
+				}
+			}
+		}
+	}
+}
