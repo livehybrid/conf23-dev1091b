@@ -29,6 +29,10 @@ The aim of the workshop is to introduce you to UCC and walk through how to get s
 
 ## Code addition
 ```
+import requests
+```
+
+```
 def get_data_from_api(logger: logging.Logger, api_key: str):
     logger.info("Getting data from an external API")
     resp = requests.get(
