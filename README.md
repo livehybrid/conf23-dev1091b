@@ -6,6 +6,7 @@ The aim of the workshop is to introduce you to UCC and walk through how to get s
 *Note: Equine Energy is a ficitious company used for the purposes of the workshop. We intend to keep the API available for a number of weeks after the conference to allow you to continue using it for development.*
 
 # Prerequisites
+* [Request a Splunk Show instance](https://show.splunk.com/event/64b5ed989b945f002551c174) 
 * UCC
   * `pip install splunk-add-on-ucc-framework`
 * SLIM ([Splunk Packaging Toolkit](https://dev.splunk.com/enterprise/docs/releaseapps/packageapps/packagingtoolkit/))
